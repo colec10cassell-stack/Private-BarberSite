@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private-Barber — Mobile Barbering | Metro Atlanta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&family=Roboto+Slab:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #6B7A3A;
+      --accent-soft: #EDEEDD;
+      --accent-dark: #54602D;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #ffffff;
+      color: #1a1a1a;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+    @media (min-width: 768px) {
+      body { overflow-x: auto; }
+    }
+
+    /* ── LOGO ── */
+    .logo { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .logo-n { font-size: 2rem; font-weight: 300; line-height: 1; letter-spacing: 0.05em; }
+    .logo-rule { width: 46px; height: 1px; background: #1a1a1a; }
+    .logo-name { font-size: 0.52rem; letter-spacing: 0.42em; text-transform: uppercase; font-weight: 400; margin-top: 5px; }
+
+    /* ── NAV ── */
+    .nav-text { font-size: 0.58rem; letter-spacing: 0.16em; font-weight: 500; text-transform: uppercase; color: #1a1a1a; text-decoration: none; }
+    .nav-text:hover { text-decoration: underline; }
+    .nav-cta { font-size: 0.58rem; letter-spacing: 0.16em; font-weight: 500; text-transform: uppercase; border: 1px solid #1a1a1a; padding: 9px 20px; color: #1a1a1a; text-decoration: none; display: inline-block; transition: background 0.22s ease, color 0.22s ease; }
+    .nav-cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .nav-cta:active { opacity: 0.75; }
+    .nav-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* Primary CTA — filled olive */
+    .nav-cta-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .nav-cta-primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); color: #fff; }
+
+    /* ── TYPOGRAPHY ── */
+    .overline { font-size: 0.58rem; letter-spacing: 0.32em; font-weight: 600; text-transform: uppercase; color: #1a1a1a; }
+    .section-heading { font-family: 'Roboto', sans-serif; font-size: 2.5rem; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.15; }
+
+    /* ── BUTTONS ── */
+    .btn { font-size: 0.56rem; letter-spacing: 0.22em; font-weight: 500; text-transform: uppercase; border: 1px solid #1a1a1a; padding: 11px 28px; color: #1a1a1a; text-decoration: none; display: inline-block; background: transparent; cursor: pointer; transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease; }
+    .btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-white { font-size: 0.56rem; letter-spacing: 0.22em; font-weight: 500; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.5); padding: 11px 28px; color: rgba(255,255,255,0.75); display: inline-block; background: transparent; cursor: pointer; transition: background 0.22s ease, color 0.22s ease, border-color 0.22s ease; }
+    .btn-white:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-white:active { opacity: 0.75; }
+    .btn-white:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .btn-disabled { opacity: 0.45; pointer-events: none; }
+
+    /* ── FORM ── */
+    .email-input { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 0.7rem; padding: 10px 0; outline: none; width: 100%; font-family: 'Roboto', sans-serif; letter-spacing: 0.05em; }
+    .email-input::placeholder { color: rgba(255,255,255,0.32); font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; }
+    .email-input:focus { border-bottom-color: var(--accent); }
+
+    img { display: block; }
+
+    /* ── ACCORDION ── */
+    .acc-toggle { display: inline-flex; align-items: center; gap: 8px; font-size: 0.56rem; letter-spacing: 0.22em; font-weight: 500; text-transform: uppercase; border: 1px solid #1a1a1a; padding: 11px 18px; color: #1a1a1a; background: transparent; flex-shrink: 0; transition: background 0.22s ease, color 0.22s ease; white-space: nowrap; cursor: pointer; }
+    .acc-header:hover .acc-toggle { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .acc-header:hover .acc-toggle .acc-chevron { stroke: #fff; }
+    .acc-chevron { transition: transform 0.35s ease, stroke 0.22s ease; flex-shrink: 0; }
+    .acc-row.acc-open .acc-chevron { transform: rotate(180deg); }
+    .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1); }
+    .acc-row.acc-open .acc-body { max-height: 320px; }
+    .acc-header { cursor: pointer; user-select: none; }
+
+    /* ── SERVICE INLINE BUTTON ── */
+    .svc-btn { display: inline-flex; align-items: center; gap: 9px; font-size: 0.56rem; letter-spacing: 0.22em; font-weight: 500; text-transform: uppercase; border: 1px solid #1a1a1a; padding: 11px 22px; color: #1a1a1a; text-decoration: none; background: transparent; white-space: nowrap; transition: background 0.22s ease, color 0.22s ease; flex-shrink: 0; }
+    .svc-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    /* ============================================================
+       LAYOUT — HEADER
+    ============================================================ */
+    .site-header {
+      padding: 22px 52px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .header-olive {
+      position: absolute;
+      top: 50%;
+      left: 58%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.3em;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      white-space: nowrap;
+    }
+    .header-olive .dot {
+      color: var(--accent);
+      margin: 0 18px;
+      font-weight: 700;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: #1a1a1a;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+    }
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      border-top: 1px solid #e4e4e4;
+      margin-top: 14px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      padding: 15px 4px;
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      font-weight: 500;
+      text-transform: uppercase;
+      color: #1a1a1a;
+      text-decoration: none;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* ============================================================
+       LAYOUT — HERO
+    ============================================================ */
+    .hero-section { padding: 0 52px; margin-bottom: 56px; }
+    .hero-box { position: relative; width: 100%; height: 564px; background: #e8e0d8; }
+    .hero-inner {
+      position: absolute;
+      top: 110px; left: 110px; right: 110px; bottom: 110px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-buttons {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    /* ============================================================
+       LAYOUT — HOW IT WORKS
+    ============================================================ */
+    .hiw-section { padding: 64px 52px 72px; border-top: 1px solid #e4e4e4; border-bottom: 1px solid #e4e4e4; }
+    .hiw-cols { display: flex; gap: 0; align-items: flex-start; }
+    .hiw-col { flex: 1; }
+    .hiw-col + .hiw-col { padding-left: 48px; }
+    .hiw-col:not(:last-child) { padding-right: 48px; border-right: 1px solid #e4e4e4; }
+
+    /* ============================================================
+       LAYOUT — ABOUT
+    ============================================================ */
+    .about-section { padding: 64px 52px; display: flex; align-items: flex-start; gap: 60px; }
+    .about-text { width: 793px; flex-shrink: 0; }
+    .about-image { flex: 1; background: #e8e0d8; min-height: 320px; }
+
+    /* ============================================================
+       LAYOUT — SERVICES
+    ============================================================ */
+    .services-section { background: #F7F0E0; padding: 0 100px; }
+
+    .svc-hdr { display: flex; align-items: center; gap: 28px; padding: 52px 0; min-height: 304px; }
+    .svc-num { font-size: 0.68rem; letter-spacing: 0.2em; color: var(--accent); min-width: 28px; line-height: 1; font-weight: 600; }
+    .svc-h2 { font-family: 'Roboto', sans-serif; font-size: 3.6rem; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; }
+
+    .svc01-controls { display: flex; flex-direction: column; gap: 18px; flex-shrink: 0; }
+    .svc01-list { list-style: disc; padding-left: 16px; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: #1a1a1a; line-height: 2.4; column-count: 2; column-gap: 28px; min-width: 220px; }
+    .svc01-btns { display: flex; align-items: center; gap: 12px; }
+    .svc01-btns .acc-toggle { margin-left: 4px; }
+
+    .svc02-hdr { gap: 36px; }
+    .svc02-h2 { min-width: 280px; }
+    .svc02-logo { height: 165px; width: auto; mix-blend-mode: multiply; flex-shrink: 0; margin-left: auto; }
+
+    .svc03-hdr { gap: 20px; padding: 70px 0; }
+    .svc03-inner { display: flex; flex-direction: column; gap: 30px; }
+    .svc03-top { display: flex; align-items: center; gap: 20px; }
+    .svc03-bottom { display: flex; align-items: center; gap: 28px; margin-left: -88px; }
+    .svc03-ghost { font-family: 'Roboto', sans-serif; font-size: 3.6rem; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1; white-space: nowrap; visibility: hidden; flex-shrink: 0; }
+    .svc03-subtext { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500; color: #1a1a1a; line-height: 2.2; white-space: nowrap; flex-shrink: 0; }
+
+    .acc-body-p { font-family: 'Roboto Slab', serif; font-size: 0.88rem; line-height: 1.85; color: #6b6b6b; max-width: 680px; padding: 0 0 44px 64px; }
+
+    /* ============================================================
+       LAYOUT — FAQ / SIGNUP / FOOTER
+    ============================================================ */
+    .faq-section { padding: 72px 52px 80px; }
+    .faq-list { max-width: 780px; display: flex; flex-direction: column; gap: 0; }
+    .faq-item { border-top: 1px solid #e4e4e4; padding: 28px 0; }
+    .faq-item:last-child { border-bottom: 1px solid #e4e4e4; }
+    .faq-q { font-size: 0.6rem; letter-spacing: 0.2em; font-weight: 600; text-transform: uppercase; margin-bottom: 12px; }
+    .faq-a { font-family: 'Roboto Slab', serif; font-size: 0.88rem; line-height: 1.85; color: #6b6b6b; }
+
+    .signup-section { background: #141414; padding: 96px 52px; text-align: center; }
+    .signup-h2 { font-family: 'Roboto', sans-serif; font-size: 4rem; font-weight: 300; letter-spacing: 0.22em; text-transform: uppercase; color: #ffffff; margin-bottom: 20px; line-height: 1.1; }
+    .signup-sub { font-size: 0.6rem; letter-spacing: 0.18em; color: rgba(255,255,255,0.42); text-transform: uppercase; max-width: 360px; margin: 0 auto 48px; line-height: 2.1; }
+    .signup-form { max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+    .signup-input-row { display: flex; align-items: center; gap: 28px; }
+    .signup-input-row .signup-logo { height: 72px; width: auto; flex-shrink: 0; filter: invert(1) grayscale(1); opacity: 0.22; }
+    .signup-input-row .email-input { flex: 1; min-width: 0; }
+    .signup-branch { display: block; max-width: 380px; width: 100%; margin: 56px auto 0; }
+    .signup-branch svg { width: 100%; height: auto; display: block; opacity: 0.85; }
+
+    .site-footer { background: #0d0d0d; padding: 22px 52px; text-align: center; }
+    .footer-copy { font-size: 0.52rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.22); text-transform: uppercase; }
+
+    /* ============================================================
+       NON-MOBILE  Force desktop layout above the mobile breakpoint.
+       Tablet-range viewports (768–1359px) get horizontal scroll
+       rather than a separate tablet layout.
+    ============================================================ */
+    @media (min-width: 768px) {
+      body { min-width: 1360px; }
+    }
+
+    /* ============================================================
+       MOBILE  767px and below
+    ============================================================ */
+    @media (max-width: 767px) {
+
+      .site-header  { padding: 16px 20px; }
+      .header-logo  { height: 58px !important; }
+      .site-nav     { display: none; }
+      .header-olive { display: none; }
+      .hamburger    { display: flex; }
+
+      .hero-section { padding: 0 16px; margin-bottom: 32px; }
+      .hero-box     { height: auto; }
+      .hero-inner   {
+        position: static;
+        inset: unset;
+        margin: 24px 24px 0;
+        padding: 28px 0;
+      }
+      .hero-inner img { width: 65% !important; }
+      .hero-buttons {
+        position: static;
+        inset: unset;
+        height: auto;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px 24px 24px;
+        gap: 12px;
+      }
+      .hero-buttons .nav-cta { text-align: center; }
+
+      .hiw-section  { padding: 44px 20px 52px; }
+      .hiw-cols     { flex-direction: column; gap: 0; }
+      .hiw-col      { padding: 0 !important; border-right: none !important; }
+      .hiw-col + .hiw-col { border-top: 1px solid #e4e4e4; padding-top: 32px !important; margin-top: 32px; }
+      .section-heading { font-size: 1.9rem; }
+
+      .about-section { padding: 44px 20px; flex-direction: column; gap: 28px; }
+      .about-text { width: 100%; flex-shrink: 1; }
+      .about-image { width: 100%; min-height: 200px; }
+
+      .services-section { padding: 0 20px; }
+
+      .svc-hdr, .svc02-hdr, .svc03-hdr {
+        flex-wrap: wrap;
+        gap: 14px;
+        padding: 28px 0;
+        align-items: flex-start;
+      }
+      .svc-h2 { font-size: 1.9rem !important; width: 100%; min-width: unset; }
+
+      .svc01-photo { display: none; }
+      .svc01-controls { width: 100%; flex-direction: row; align-items: flex-start; gap: 12px; }
+      .svc01-list { display: block; column-count: 1; min-width: unset; letter-spacing: 0.06em; line-height: 1.9; flex: 0 0 44%; }
+      .svc01-btns { flex: 1; flex-direction: column; align-items: flex-start; gap: 10px; }
+      .svc01-btns .svc-btn { white-space: normal; text-align: left; max-width: 140px; }
+      .svc01-btns .acc-toggle { margin-left: 0; }
+
+      .svc02-h2 { min-width: unset; font-size: 1.9rem !important; width: 100%; }
+      .svc02-logo { display: block; height: 158px !important; width: auto; margin-left: auto; margin-right: 10px; align-self: flex-start; margin-top: -22px; }
+      .svc02-hdr { gap: 14px; }
+      .svc02-btns { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; width: auto; flex: 1; }
+      .svc02-btns .acc-toggle { margin-left: 0; }
+
+      .svc03-hdr { padding: 28px 0; }
+      .svc03-inner { gap: 16px; width: 100%; }
+      .svc03-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .svc03-top h2 { font-size: 1.9rem !important; }
+      .svc03-subtext { white-space: normal; }
+      .svc03-bottom { flex-direction: column; align-items: flex-start; gap: 10px; margin-left: 0; }
+      .svc03-ghost { display: none; }
+      .svc03-bottom .acc-toggle { margin-left: 0; }
+
+      .acc-body-p { padding: 0 0 28px 0; }
+      .acc-row.acc-open .acc-body { max-height: 500px; }
+
+      .faq-section { padding: 44px 20px 52px; }
+
+      .signup-section { padding: 60px 20px; }
+      .signup-h2 { font-size: 2.4rem; letter-spacing: 0.14em; }
+
+      .site-footer { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<header class="site-header">
+  <div class="header-row">
+    <div class="header-left">
+      <img src="brand_assets/private-barber-high-resolution-logo.png"
+           alt="Private Barber"
+           class="header-logo"
+           style="height: 90px; width: auto; mix-blend-mode: multiply;">
+      <nav class="site-nav">
+        <a href="#about"    class="nav-text">About</a>
+        <a href="#services" class="nav-text">Services</a>
+        <a href="#faq"      class="nav-text">FAQ</a>
+        <a href="Contact.html" class="nav-text">Contact</a>
+      </nav>
+      <div class="header-olive" aria-hidden="true">
+        <span>Professional Grooming.</span>
+        <span class="dot">•</span>
+        <span>Delivered.</span>
+      </div>
+    </div>
+    <button class="hamburger" aria-label="Open menu"
+            onclick="
+              var n = document.getElementById('mobileNav');
+              n.classList.toggle('open');
+              this.setAttribute('aria-label', n.classList.contains('open') ? 'Close menu' : 'Open menu');
+            ">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+  <nav id="mobileNav" class="mobile-nav">
+    <a href="#about"    onclick="document.getElementById('mobileNav').classList.remove('open')">About</a>
+    <a href="#services" onclick="document.getElementById('mobileNav').classList.remove('open')">Services</a>
+    <a href="#faq"      onclick="document.getElementById('mobileNav').classList.remove('open')">FAQ</a>
+    <a href="Contact.html" onclick="document.getElementById('mobileNav').classList.remove('open')">Contact</a>
+    <a href="Contact.html" onclick="document.getElementById('mobileNav').classList.remove('open')">Book Now</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="hero-box">
+    <div class="hero-inner">
+      <img src="brand_assets/private-barber-high-resolution-logo.png"
+           alt="Private Barber"
+           style="width: 50%; mix-blend-mode: multiply;">
+    </div>
+    <div class="hero-buttons">
+      <a href="Contact.html"  class="nav-cta nav-cta-primary">BOOK NOW</a>
+      <a href="#how-it-works" class="nav-cta">HOW IT WORKS</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" class="hiw-section">
+  <p class="overline" style="margin-bottom: 14px;">The Process</p>
+  <h2 class="section-heading" style="margin-bottom: 52px;">How It Works</h2>
+  <div class="hiw-cols">
+    <div class="hiw-col">
+      <span style="font-size: 0.62rem; letter-spacing: 0.2em; color: var(--accent); display: block; margin-bottom: 18px; font-weight: 600;">01</span>
+      <p style="font-size: 0.6rem; letter-spacing: 0.2em; font-weight: 600; text-transform: uppercase; margin-bottom: 14px;">Reach Out</p>
+      <p style="font-family: 'Roboto Slab', serif; font-size: 0.88rem; line-height: 1.85; color: #6b6b6b;">Contact us to discuss your office day, house call, or event. We confirm availability and sort out the details.</p>
+    </div>
+    <div class="hiw-col">
+      <span style="font-size: 0.62rem; letter-spacing: 0.2em; color: var(--accent); display: block; margin-bottom: 18px; font-weight: 600;">02</span>
+      <p style="font-size: 0.6rem; letter-spacing: 0.2em; font-weight: 600; text-transform: uppercase; margin-bottom: 14px;">Get Your Link</p>
+      <p style="font-family: 'Roboto Slab', serif; font-size: 0.88rem; line-height: 1.85; color: #6b6b6b;">Once booked, we send you a Calendly link. For office days, forward it to your team — everyone claims their own slot directly.</p>
+    </div>
+    <div class="hiw-col">
+      <span style="font-size: 0.62rem; letter-spacing: 0.2em; color: var(--accent); display: block; margin-bottom: 18px; font-weight: 600;">03</span>
+      <p style="font-size: 0.6rem; letter-spacing: 0.2em; font-weight: 600; text-transform: uppercase; margin-bottom: 14px;">We Handle the Rest</p>
+      <p style="font-family: 'Roboto Slab', serif; font-size: 0.88rem; line-height: 1.85; color: #6b6b6b;">We arrive fully equipped, set up on-site, deliver the cuts, clean up completely, and leave. Nothing required from you on the day.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-section">
+  <div class="about-text">
+    <p style="font-family: 'Roboto Slab', serif; font-size: 1.25rem; line-height: 1.75; color: #1a1a1a; margin-bottom: 22px;">
+      Private-Barber brings a professional barbering experience directly to you: no waiting rooms, no commute, no disruption to your day.
+    </p>
+    <p style="font-family: 'Roboto Slab', serif; font-size: 1rem; line-height: 1.85; color: #7A7A7A;">
+      Based in Metro Atlanta, we serve corporate offices, private residences, and events across the region. We arrive fully equipped, deliver a clean, precise cut, and leave the space exactly as we found it. The only thing you need to bring is yourself.
+    </p>
+  </div>
+  <div class="about-image" style="display:flex;align-items:center;justify-content:center;">
+    <img src="brand_assets/Private-barber_images/middle_row.jpg" alt="" style="width:100%;height:100%;object-fit:contain;">
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services-section">
+
+  <!-- Row 01: OFFICE DAYS -->
+  <div class="acc-row" style="border-bottom: 1px solid #d8d1c5;">
+    <div class="acc-header svc-hdr"
+         onclick="this.closest('.acc-row').classList.toggle('acc-open')">
+      <span class="svc-num">01</span>
+      <img src="brand_assets/Private-barber_images/still_frame_clean.jpg"
+           alt="Office day photo"
+           class="svc01-photo"
+           style="height: 200px; width: 180px; object-fit: cover; flex-shrink: 0;">
+      <h2 class="svc-h2" style="min-width: 260px;">OFFICE DAYS</h2>
+      <div class="svc01-controls">
+        <ul class="svc01-list">
+          <li>On-site setup included</li>
+          <li>Individual booking links</li>
+          <li>$50 per cut</li>
+          <li>$200 minimum</li>
+        </ul>
+        <div class="svc01-btns">
+          <a href="Contact.html?service=office" onclick="event.stopPropagation()" class="svc-btn">
+            INQUIRE ABOUT AN OFFICE DAY
+          </a>
+          <span class="acc-toggle">DETAILS
+            <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:13px;height:13px;"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="acc-body">
+      <div id="office-acc-inner" style="display:flex; align-items:flex-start; gap:24px;">
+        <p id="office-acc-p" class="acc-body-p" style="margin:0; flex:none; min-width:200px;">We come to your office fully equipped: portable chair, all tools, vacuumn, everything. Once your office day is confirmed, we send you a booking link that your team uses to claim their own time slots. No back-and-forth required on your end.</p>
+        <a id="office-day-pdf-btn" href="brand_assets/Private-Barber_OfficeDay.pdf" target="_blank" onclick="event.stopPropagation()" class="svc-btn" style="flex-shrink:0; align-self:flex-start;">OFFICE DAY PDF</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 02: HOUSE CALLS -->
+  <div class="acc-row" style="border-bottom: 1px solid #d8d1c5;">
+    <div class="acc-header svc-hdr svc02-hdr"
+         onclick="this.closest('.acc-row').classList.toggle('acc-open')">
+      <span class="svc-num">02</span>
+      <h2 class="svc-h2 svc02-h2">HOUSE CALLS</h2>
+      <div class="svc02-btns">
+        <a href="Contact.html?service=house" onclick="event.stopPropagation()" class="svc-btn">
+          BOOK A HOUSE CALL
+        </a>
+        <span class="acc-toggle" style="margin-left: 16px;">DETAILS
+          <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:13px;height:13px;"><polyline points="6 9 12 15 18 9"/></svg>
+        </span>
+      </div>
+      <img src="brand_assets/private-barber-high-resolution-logo.png"
+           alt=""
+           class="svc02-logo">
+    </div>
+    <div class="acc-body">
+      <p class="acc-body-p">Whether it's a single appointment or a group booking for the household, we come to you. Ideal for busy professionals, fathers booking for the family, or anyone who values their time more than a waiting room. Starting at $100. Pricing varies by location and group size.</p>
+    </div>
+  </div>
+
+  <!-- Row 03: WEDDINGS & EVENTS -->
+  <div class="acc-row">
+    <div class="acc-header svc-hdr svc03-hdr"
+         onclick="this.closest('.acc-row').classList.toggle('acc-open')">
+      <span class="svc-num" style="align-self: center;">03</span>
+      <div class="svc03-inner">
+        <div class="svc03-top">
+          <h2 style="font-family: 'Roboto', sans-serif; font-size: 3.6rem; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1;">WEDDINGS &amp; EVENTS</h2>
+          <p class="svc03-subtext">SERVING METRO<br>ATLANTA + BEYOND</p>
+          <div style="position:relative;width:180px;height:0;flex-shrink:0;margin-left:40px;">
+            <img src="brand_assets/Private-barber_images/barber_bw.jpg" alt="" style="position:absolute;width:180px;height:230px;top:50%;transform:translateY(-28%);object-fit:cover;">
+          </div>
+        </div>
+        <div class="svc03-bottom">
+          <span aria-hidden="true" class="svc03-ghost">OFFICE DAYS</span>
+          <a href="Contact.html?service=event" onclick="event.stopPropagation()" class="svc-btn">
+            REQUEST AN EVENT QUOTE
+          </a>
+          <span class="acc-toggle">DETAILS
+            <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:13px;height:13px;"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="acc-body">
+      <p class="acc-body-p">Groom's party prep, rehearsal day touch-ups, milestone celebrations — we provide on-site grooming services for the moments that matter. Available throughout Metro Atlanta and willing to travel for the right event. Reach out early; dates fill quickly.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="faq-section">
+  <p class="overline" style="margin-bottom: 14px;">Questions</p>
+  <h2 class="section-heading" style="margin-bottom: 52px;">FAQ</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <p class="faq-q">Do I need to provide anything?</p>
+      <p class="faq-a">No. We bring everything — chair, tools, vacuum, and extension cord. All we need is a designated space to set up.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">How many people can you cut in a day?</p>
+      <p class="faq-a">Typically 8–10 people for a full office day, depending on the schedule. Exact capacity is confirmed at booking.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">How does the office booking link work?</p>
+      <p class="faq-a">After confirming your office day, we send you a Calendly link. You forward it to your team — they pick their own time slots from what's available. No back-and-forth required.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">Do you serve areas outside Metro Atlanta?</p>
+      <p class="faq-a">Metro Atlanta is our primary service area. We'll travel further for weddings, events, or larger bookings — reach out to discuss.</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">What is the cancellation policy?</p>
+      <p class="faq-a">Cancellation details are included in your booking confirmation. We ask for reasonable notice so we can offer the slot to someone else.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SIGN UP -->
+<section class="signup-section">
+  <h2 class="signup-h2">Stay in the Loop</h2>
+  <p class="signup-sub">
+    Be the first to hear about new availability, office day openings, and exclusive offers in Metro Atlanta.
+  </p>
+  <form class="signup-form" onsubmit="return false;">
+    <div class="signup-input-row">
+      <img class="signup-logo" src="brand_assets/private-barber-high-resolution-logo.png" alt="Private Barber">
+      <input class="email-input" type="email" placeholder="Email Address">
+    </div>
+    <button type="submit" class="btn-white">Submit</button>
+  </form>
+  <div class="signup-branch" aria-hidden="true">
+    <img src="brand_assets/olive-branch.svg" alt="">
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p class="footer-copy">&copy; 2025 Private-Barber. All Rights Reserved.</p>
+</footer>
+
+<script>
+  function alignOfficePdfBtn() {
+    const inquireBtn = document.querySelector('.svc01-btns .svc-btn');
+    const para = document.getElementById('office-acc-p');
+    if (!inquireBtn || !para) return;
+    const accRow = para.closest('.acc-row');
+    if (!accRow) return;
+    const rowRect = accRow.getBoundingClientRect();
+    const inquireRect = inquireBtn.getBoundingClientRect();
+    const paraBoxWidth = (inquireRect.left - rowRect.left) - 24;
+    if (paraBoxWidth > 200) {
+      para.style.maxWidth = 'none';
+      para.style.width = paraBoxWidth + 'px';
+    }
+  }
+  document.fonts.ready.then(alignOfficePdfBtn);
+  window.addEventListener('resize', alignOfficePdfBtn);
+</script>
+</body>
+</html>
