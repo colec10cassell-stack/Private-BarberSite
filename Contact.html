@@ -507,6 +507,9 @@
       </a>
     </div>
 
+    <!-- Honeypot field — hidden from real users, bots will fill it in -->
+    <input type="text" name="website" id="honeypot" autocomplete="off" tabindex="-1" aria-hidden="true" style="display:none;">
+
     <div class="form-divider"><span>Or Send An Inquiry</span></div>
 
     <div class="form-error-banner" id="formErrBanner" role="alert">
@@ -723,8 +726,46 @@
       }
 
       banner.classList.remove('is-on');
-      success.classList.add('is-on');
-      form.querySelector('.form-actions').style.display = 'none';
+
+      // Honeypot check — if filled in, it's a bot
+      if (document.getElementById('honeypot').value) {
+        return;
+      }
+
+      // Disable button while sending
+      var submitBtn = form.querySelector('.submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service: selected.value,
+          name: iName.value.trim(),
+          email: iEmail.value.trim(),
+          phone: iPhone.value.trim(),
+          message: document.getElementById('f-msg').value.trim(),
+          website: document.getElementById('honeypot').value
+        })
+      }).then(function(response) {
+        return response.json().then(function(result) {
+          if (response.ok) {
+            success.classList.add('is-on');
+            form.querySelector('.form-actions').style.display = 'none';
+          } else {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Send Inquiry <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>';
+            banner.textContent = 'Something went wrong. Please try again or contact us directly.';
+            banner.classList.add('is-on');
+          }
+        });
+      }).catch(function() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Inquiry <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"></path></svg>';
+        banner.textContent = 'Something went wrong. Please try again or contact us directly.';
+        banner.classList.add('is-on');
+      });
     });
   })();
 </script>

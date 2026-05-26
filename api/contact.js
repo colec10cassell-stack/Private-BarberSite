@@ -7,7 +7,12 @@ module.exports = async (req, res) => {
     return res.status(405).json({ message: 'Method not allowed' });
   }
 
-  const { service, name, email, phone, message } = req.body;
+  const { service, name, email, phone, message, website } = req.body;
+
+  // Honeypot check — bots fill this in, humans don't
+  if (website) {
+    return res.status(200).json({ message: 'Message sent successfully' });
+  }
 
   try {
     await resend.emails.send({
